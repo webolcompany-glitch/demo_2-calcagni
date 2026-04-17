@@ -34,7 +34,7 @@ def invia_email(destinatario, prezzo, template, nome=""):
             .replace("{nome}", nome)\
             .replace("{data}", data)
 
-        # ✅ FIX HTML EMAIL
+        # ✅ FIX UNICO (HTML EMAIL CORRETTA)
         msg = MIMEMultipart("alternative")
         msg["Subject"] = f"OFFERTA CARBURANTE - {data}"
         msg["From"] = EMAIL_MITTENTE
@@ -239,7 +239,7 @@ if st.session_state.page == "dashboard":
 
     st.divider()
 
-    # INVIO MASSIVO
+    # MASS EMAIL
     if st.button("📧 Invia email a tutti"):
 
         count = 0
