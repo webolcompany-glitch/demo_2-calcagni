@@ -287,21 +287,24 @@ if st.session_state.page == "dashboard":
         col1, col2, col3 = st.columns(3)
 
         with col1:
-            tel = str(c["Telefono"]).replace("+", "").replace(" ", "")
-            data = datetime.now().strftime("%d/%m/%Y")
+    import urllib.parse
 
-            msg = st.session_state.wa_template \
-                .replace("{prezzo}", format_euro(prezzo)) \
-                .replace("{nome}", c["Nome"]) \
-                .replace("{data}", data)
+    tel = str(c["Telefono"]).replace("+", "").replace(" ", "")
+    data = datetime.now().strftime("%d/%m/%Y")
 
-            wa = f"https://wa.me/{tel}?text={msg}"
-            wa = wa.replace(" ", "%20").replace("\n", "%0A")
+    msg = st.session_state.wa_template \
+        .replace("{prezzo}", format_euro(prezzo)) \
+        .replace("{nome}", c["Nome"]) \
+        .replace("{data}", data)
 
-            st.markdown(
-                f"<a href='{wa}' target='_blank' style='display:block;padding:8px;background:#22c55e;color:white;text-align:center;border-radius:10px;'>WhatsApp</a>",
-                unsafe_allow_html=True
-            )
+    msg_encoded = urllib.parse.quote(msg)
+
+    wa = f"https://wa.me/{tel}?text={msg_encoded}"
+
+    st.markdown(
+        f"[📲 WhatsApp]( {wa} )",
+        unsafe_allow_html=False
+    )
 
         with col2:
             if c["Email"] and pd.notna(c["Email"]):
