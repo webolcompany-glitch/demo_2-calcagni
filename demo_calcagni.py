@@ -151,7 +151,7 @@ if "wa_template" not in st.session_state:
 
 con la presente le formuliamo la nostra migliore offerta sui prodotti utilizzati dalla Vostra azienda ''ipotizzando'' un presunto scarico per la giornata di seguito indicata.
 
-📅 Data: {data}
+Data: {data}
 
 Gasolio per autotrazione = {prezzo}/litro + Iva
 
