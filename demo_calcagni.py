@@ -302,7 +302,7 @@ if st.session_state.page == "dashboard":
             wa = f"https://wa.me/{tel}?text={msg_encoded}"
 
             st.markdown(
-                f"[📲 WhatsApp]( {wa} )",
+                st.link_button("📲 WhatsApp", wa),
                 unsafe_allow_html=False
              )
 
