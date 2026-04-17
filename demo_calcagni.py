@@ -252,7 +252,9 @@ if st.session_state.page == "dashboard":
     NON modificare:
     - i tag HTML (es. <b>, <br>, <hr>)
     - le variabili tra parentesi graffe (es. {prezzo}, {nome}, {data})
+    
     ✔ Puoi cambiare le frasi liberamente
+    
     ❌ Non cancellare o modificare i simboli tecnici
     """)
         
