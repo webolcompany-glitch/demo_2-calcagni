@@ -287,24 +287,24 @@ if st.session_state.page == "dashboard":
         col1, col2, col3 = st.columns(3)
 
         with col1:
-    import urllib.parse
+            import urllib.parse
 
-    tel = str(c["Telefono"]).replace("+", "").replace(" ", "")
-    data = datetime.now().strftime("%d/%m/%Y")
+            tel = str(c["Telefono"]).replace("+", "").replace(" ", "")
+            data = datetime.now().strftime("%d/%m/%Y")
 
-    msg = st.session_state.wa_template \
-        .replace("{prezzo}", format_euro(prezzo)) \
-        .replace("{nome}", c["Nome"]) \
-        .replace("{data}", data)
+            msg = st.session_state.wa_template \
+                .replace("{prezzo}", format_euro(prezzo)) \
+                .replace("{nome}", c["Nome"]) \
+                .replace("{data}", data)
 
-    msg_encoded = urllib.parse.quote(msg)
+            msg_encoded = urllib.parse.quote(msg)
 
-    wa = f"https://wa.me/{tel}?text={msg_encoded}"
+            wa = f"https://wa.me/{tel}?text={msg_encoded}"
 
-    st.markdown(
-        f"[📲 WhatsApp]( {wa} )",
-        unsafe_allow_html=False
-    )
+            st.markdown(
+                f"[📲 WhatsApp]( {wa} )",
+                unsafe_allow_html=False
+             )
 
         with col2:
             if c["Email"] and pd.notna(c["Email"]):
