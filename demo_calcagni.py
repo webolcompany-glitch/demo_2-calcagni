@@ -22,8 +22,8 @@ st.markdown(f"## 🏢 Azienda: {azienda.upper()}")
 # =========================
 # 📧 EMAIL
 # =========================
-EMAIL_MITTENTE = "webolcompany@gmail.com"
-PASSWORD_APP = "neqr ewtb bdkr lmca"
+EMAIL_MITTENTE = st.secrets["EMAIL_MITTENTE"]
+PASSWORD_APP = st.secrets["PASSWORD_APP"]
 
 def invia_email(destinatario, prezzo, template, nome=""):
     try:
