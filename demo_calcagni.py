@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import os
 import smtplib
-import urllib.parse
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
@@ -71,16 +70,6 @@ def filtra_clienti(df, search):
         df["Telefono"].astype(str).str.contains(search, case=False, na=False)
     ]
 
-def format_whatsapp(template, prezzo, nome=""):
-    data = datetime.now().strftime("%d/%m/%Y")
-
-    testo = template\
-        .replace("{prezzo}", f"{prezzo:.3f}")\
-        .replace("{nome}", nome)\
-        .replace("{data}", data)
-
-    return urllib.parse.quote(testo)
-
 # =========================
 # 💾 DATA
 # =========================
@@ -122,14 +111,22 @@ if "edit_id" not in st.session_state:
 if "prezzo_base" not in st.session_state:
     st.session_state.prezzo_base = 1.000
 
+# 🔥 FIX RICHIESTO: stesso contenuto usato anche come base messaggio
 if "email_template" not in st.session_state:
     st.session_state.email_template = """Gentile cliente,<br><br>
-<b>Gasolio = {prezzo}/L</b><br><br>
-"""
 
-# 🔥 TEMPLATE WHATSAPP
-if "whatsapp_template" not in st.session_state:
-    st.session_state.whatsapp_template = "Ciao {nome}, oggi il prezzo è {prezzo} €/L aggiornato al {data}"
+con la presente le formuliamo la nostra migliore offerta sui prodotti utilizzati dalla Vostra azienda ''ipotizzando'' un presunto scarico per la giornata in oggetto.<br><br>
+
+<b>Gasolio per autotrazione = {prezzo}/litro + Iva</b><br><br>
+
+Per via delle attuali fluttuazioni di mercato i prezzi in elenco avranno una validità giornaliera.<br><br>
+
+Le consegne dei prodotti avverranno entro il giorno dopo alla data di effettuazione dell’ordine.<br><br>
+
+<b>ATTENZIONE!!!</b> GLI ORDINI DOVRANNO PERVENIRE ENTRO LE ORE 14:00<br><br>
+
+Rag. Silvio Calcagni -335/6145323                 Luigi Calcagni - 3209364267
+"""
 
 df = st.session_state.clienti
 
@@ -208,103 +205,56 @@ if st.session_state.page == "dashboard":
 
     # EMAIL TEMPLATE
     st.markdown("### ✉️ Messaggio Email")
-    template = st.text_area("Email", value=st.session_state.email_template, height=250)
+
+    template = st.text_area(
+        "Modifica il messaggio",
+        value=st.session_state.email_template,
+        height=300
+    )
+
+    # 🔥 FIX: sincronizzazione messaggio
     st.session_state.email_template = template
 
     st.divider()
 
-    # WHATSAPP TEMPLATE
-    st.markdown("### 💬 Messaggio WhatsApp")
-    wa_template = st.text_area("WhatsApp", value=st.session_state.whatsapp_template, height=120)
-    st.session_state.whatsapp_template = wa_template
+    if st.button("📧 Invia email a tutti"):
 
-    st.divider()
+        count = 0
 
-# =========================================================
-# 👤 CLIENTI PAGE
-# =========================================================
-elif st.session_state.page == "clienti":
+        for _, c in df.iterrows():
+            if c["Email"] and pd.notna(c["Email"]):
 
-    st.markdown("## 👤 Clienti")
+                prezzo = calc_price(prezzo_base, c["Margine"], c["Trasporto"])
 
-    search = st.text_input("🔍 Cerca cliente")
-    df_view = filtra_clienti(df, search)
+                invia_email(c["Email"], prezzo, template, c["Nome"])
+
+                st.session_state.clienti.loc[
+                    st.session_state.clienti["ID"] == c["ID"],
+                    "UltimoPrezzo"
+                ] = prezzo
+
+                count += 1
+
+        save_data(st.session_state.clienti)
+        st.success(f"Email inviate: {count}")
+
+    st.markdown("### 👤 Clienti")
+
+    search_dash = st.text_input("🔍 Cerca", key="search_dashboard")
+    df_view = filtra_clienti(df, search_dash)
 
     for _, c in df_view.iterrows():
 
-        ultimo_txt = "Nessun invio" if pd.isna(c["UltimoPrezzo"]) else format_euro(c["UltimoPrezzo"]) + " €/L"
+        prezzo = calc_price(prezzo_base, c["Margine"], c["Trasporto"])
+        ultimo = c["UltimoPrezzo"]
+        ultimo_txt = "Nessun invio" if pd.isna(ultimo) else format_euro(ultimo) + " €/L"
 
         st.markdown(f"""
         ### 👤 {c['Nome']}
-        📄 {c['PIVA']}  
-        📞 {c['Telefono']}  
-        💰 Ultimo: {ultimo_txt}
+        📄 P.IVA: {c['PIVA']}  
+        💰 Oggi: {format_euro(prezzo)} €/L  
+        📌 Ultimo: **{ultimo_txt}**
         """)
 
-        col1, col2 = st.columns(2)
-
-        with col1:
-            tel = str(c["Telefono"]).replace("+", "").replace(" ", "")
-
-            msg = format_whatsapp(
-                st.session_state.whatsapp_template,
-                calc_price(st.session_state.prezzo_base, c["Margine"], c["Trasporto"]),
-                c["Nome"]
-            )
-
-            wa = f"https://wa.me/{tel}?text={msg}"
-
-            st.markdown(f"<a href='{wa}' target='_blank'>WhatsApp</a>", unsafe_allow_html=True)
-
-        with col2:
-            if st.button("🗑️ Elimina", key=f"del_{c['ID']}"):
-                st.session_state.clienti = df[df["ID"] != c["ID"]]
-                save_data(st.session_state.clienti)
-                st.rerun()
-
-# =========================================================
-# ➕ CLIENTE PAGE
-# =========================================================
-elif st.session_state.page == "cliente":
-
-    st.markdown("## ➕ Cliente")
-
-    editing = st.session_state.edit_id is not None
-
-    if editing:
-        c = df[df["ID"] == st.session_state.edit_id].iloc[0]
-    else:
-        c = {"Nome":"","PIVA":"","Telefono":"","Email":"","Margine":0.0,"Trasporto":0.0}
-
-    nome = st.text_input("Nome", value=c["Nome"])
-    piva = st.text_input("PIVA", value=c["PIVA"])
-    tel = st.text_input("Telefono", value=c["Telefono"])
-    email = st.text_input("Email", value=c["Email"])
-    margine = st.number_input("Margine", value=float(c["Margine"]))
-    trasporto = st.number_input("Trasporto", value=float(c["Trasporto"]))
-
-    if st.button("💾 Salva"):
-
-        if editing:
-            idx = st.session_state.clienti["ID"] == st.session_state.edit_id
-            st.session_state.clienti.loc[idx, ["Nome","PIVA","Telefono","Email","Margine","Trasporto"]] = [
-                nome,piva,tel,email,margine,trasporto
-            ]
-        else:
-            new_id = 1 if df.empty else int(df["ID"].max()) + 1
-            new = pd.DataFrame([{
-                "ID": new_id,
-                "Nome": nome,
-                "PIVA": piva,
-                "Telefono": tel,
-                "Email": email,
-                "Margine": margine,
-                "Trasporto": trasporto,
-                "UltimoPrezzo": None
-            }])
-            st.session_state.clienti = pd.concat([df, new], ignore_index=True)
-
-        save_data(st.session_state.clienti)
-        st.success("Salvato")
-        st.session_state.page = "clienti"
-        st.rerun()
+        st.divider()
+        
