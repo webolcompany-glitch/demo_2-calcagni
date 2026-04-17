@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import os
 import smtplib
-import re
-import json
 from email.mime.text import MIMEText
 from datetime import datetime
 
@@ -17,42 +15,30 @@ if isinstance(azienda, list):
     azienda = azienda[0]
 
 FILE = f"clienti_{azienda}.csv"
-CONFIG_FILE = f"config_{azienda}.json"
 
 st.markdown(f"## 🏢 Azienda: {azienda.upper()}")
 
 # =========================
-# 📧 EMAIL CREDENZIALI
+# 📧 EMAIL
 # =========================
 EMAIL_MITTENTE = "webolcompany@gmail.com"
 PASSWORD_APP = "neqr ewtb bdkr lmca"
 
-# =========================
-# 📧 EMAIL INVIO
-# =========================
-def invia_email(destinatario, prezzo, cc=None):
+def invia_email(destinatario, prezzo):
     try:
         data = datetime.now().strftime("%d/%m/%Y")
 
-        prezzo_txt = f"{prezzo:.3f}".replace(".", ",")
-
-        testo = st.session_state.email_template.replace("{prezzo}", prezzo_txt)
-
-        msg = MIMEText(testo)
+        msg = MIMEText(
+            f"Buongiorno,\n\nIl prezzo di oggi è {prezzo:.3f} €/L\n\nGrazie"
+        )
         msg["Subject"] = f"OFFERTA CARBURANTE - {data}"
         msg["From"] = EMAIL_MITTENTE
         msg["To"] = destinatario
 
-        destinatari = [destinatario]
-
-        if cc:
-            msg["Cc"] = cc
-            destinatari.append(cc)
-
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()
         server.login(EMAIL_MITTENTE, PASSWORD_APP)
-        server.send_message(msg, to_addrs=destinatari)
+        server.send_message(msg)
         server.quit()
 
     except Exception as e:
@@ -77,19 +63,6 @@ def filtra_clienti(df, search):
         df["PIVA"].astype(str).str.contains(search, case=False, na=False) |
         df["Telefono"].astype(str).str.contains(search, case=False, na=False)
     ]
-
-# =========================
-# 💾 CONFIG
-# =========================
-def load_config():
-    if os.path.exists(CONFIG_FILE):
-        with open(CONFIG_FILE, "r") as f:
-            return json.load(f)
-    return {}
-
-def save_config(config):
-    with open(CONFIG_FILE, "w") as f:
-        json.dump(config, f)
 
 # =========================
 # 💾 DATA
@@ -120,8 +93,6 @@ def save_data(df):
 # =========================
 # INIT
 # =========================
-config = load_config()
-
 if "clienti" not in st.session_state:
     st.session_state.clienti = load_data()
 
@@ -133,16 +104,6 @@ if "edit_id" not in st.session_state:
 
 if "prezzo_base" not in st.session_state:
     st.session_state.prezzo_base = 1.000
-
-if "email_template" not in st.session_state:
-    st.session_state.email_template = config.get("email_template", """Gentile cliente,
-
-con la presente le formuliamo la nostra migliore offerta.
-
-Gasolio per autotrazione = {prezzo}/litro + IVA
-
-Cordiali saluti
-""")
 
 df = st.session_state.clienti
 
@@ -166,8 +127,20 @@ with c3:
 st.divider()
 
 # =========================
-# 📊 DASHBOARD
+# CARD
 # =========================
+def card(title, value):
+    return f"""
+    <div style="padding:14px;border-radius:14px;background:#111827;
+    color:white;text-align:center;margin:6px 0;">
+        <div style="font-size:12px;opacity:0.7;">{title}</div>
+        <div style="font-size:20px;font-weight:600">{value}</div>
+    </div>
+    """
+
+# =========================================================
+# 📊 DASHBOARD
+# =========================================================
 if st.session_state.page == "dashboard":
 
     st.markdown("## ⛽ Dashboard operativa")
@@ -181,47 +154,36 @@ if st.session_state.page == "dashboard":
 
     st.session_state.prezzo_base = prezzo_base
 
-    # =========================
-    # TEMPLATE EMAIL
-    # =========================
-    st.markdown("### ✉️ Template Email")
+    clienti_count = len(df)
 
-    email_template = st.text_area(
-        "Scrivi email (usa {prezzo})",
-        value=st.session_state.email_template,
-        height=300
+    media_margine = round(df["Margine"].mean(), 3) if not df.empty else 0
+
+    prezzo_medio = (
+        calc_price(prezzo_base, df["Margine"].mean(), df["Trasporto"].mean())
+        if not df.empty else prezzo_base
     )
 
-    st.session_state.email_template = email_template
-    config["email_template"] = email_template
-    save_config(config)
+    c1, c2 = st.columns(2)
+    c3, c4 = st.columns(2)
 
-    st.info("Usa {prezzo} per inserire il prezzo automaticamente")
+    with c1:
+        st.markdown(card("⛽ Base", format_euro(prezzo_base)), unsafe_allow_html=True)
 
-    # =========================
-    # VALIDAZIONE TEMPLATE
-    # =========================
-    pattern_numero = r"\b\d+[.,]\d+\b"
-    template_senza = email_template.replace("{prezzo}", "")
-    numeri = re.findall(pattern_numero, template_senza)
+    with c2:
+        st.markdown(card("👤 Clienti", clienti_count), unsafe_allow_html=True)
 
-    manca = "{prezzo}" not in email_template
+    with c3:
+        st.markdown(card("📊 Margine medio", format_euro(media_margine)), unsafe_allow_html=True)
 
-    if manca:
-        st.error("❌ Inserire {prezzo}")
+    with c4:
+        st.markdown(card("💰 Prezzo medio", format_euro(prezzo_medio)), unsafe_allow_html=True)
 
-    if numeri:
-        st.error(f"❌ Rimuovi prezzi manuali: {', '.join(numeri)}")
-
-    blocca = manca or len(numeri) > 0
-
-    # CC EMAIL
-    cc_email = st.text_input("📧 CC Email (opzionale)")
+    st.divider()
 
     # =========================
-    # INVIO MASSIVO
+    # 🚀 MASS EMAIL
     # =========================
-    if st.button("📧 Invia email a tutti", disabled=blocca):
+    if st.button("📧 Invia email a tutti"):
 
         count = 0
 
@@ -230,7 +192,7 @@ if st.session_state.page == "dashboard":
 
                 prezzo = calc_price(prezzo_base, c["Margine"], c["Trasporto"])
 
-                invia_email(c["Email"], prezzo, cc=cc_email)
+                invia_email(c["Email"], prezzo)
 
                 st.session_state.clienti.loc[
                     st.session_state.clienti["ID"] == c["ID"],
@@ -242,23 +204,80 @@ if st.session_state.page == "dashboard":
         save_data(st.session_state.clienti)
         st.success(f"Email inviate: {count}")
 
-# =========================
-# 👤 CLIENTI PAGE
-# =========================
-elif st.session_state.page == "clienti":
+    # =========================
+    # 👤 LISTA CLIENTI
+    # =========================
+    st.markdown("### 👤 Clienti")
 
-    st.markdown("## 👤 Clienti")
-
-    search = st.text_input("🔍 Cerca")
-    df_view = filtra_clienti(df, search)
+    search_dash = st.text_input("🔍 Cerca", key="search_dashboard")
+    df_view = filtra_clienti(df, search_dash)
 
     for _, c in df_view.iterrows():
+
+        prezzo = calc_price(prezzo_base, c["Margine"], c["Trasporto"])
 
         ultimo = c["UltimoPrezzo"]
         ultimo_txt = "Nessun invio" if pd.isna(ultimo) else format_euro(ultimo) + " €/L"
 
         st.markdown(f"""
-        ### {c['Nome']}
+        ### 👤 {c['Nome']}
+        📄 P.IVA: {c['PIVA']}  
+        💰 Oggi: {format_euro(prezzo)} €/L  
+        📌 Ultimo: **{ultimo_txt}**
+        """)
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            tel = str(c["Telefono"]).replace("+", "").replace(" ", "")
+            msg = f"Prezzo oggi {format_euro(prezzo)} €/L"
+            wa = f"https://wa.me/{tel}?text={msg.replace(' ', '%20')}"
+
+            st.markdown(
+                f"<a href='{wa}' target='_blank' style='display:block;padding:8px;background:#22c55e;color:white;text-align:center;border-radius:10px;'>WhatsApp</a>",
+                unsafe_allow_html=True
+            )
+
+        with col2:
+            if c["Email"] and pd.notna(c["Email"]):
+                if st.button("📧 Email", key=f"mail_{c['ID']}"):
+
+                    prezzo_send = calc_price(prezzo_base, c["Margine"], c["Trasporto"])
+
+                    invia_email(c["Email"], prezzo_send)
+
+                    st.session_state.clienti.loc[
+                        st.session_state.clienti["ID"] == c["ID"],
+                        "UltimoPrezzo"
+                    ] = prezzo_send
+
+                    save_data(st.session_state.clienti)
+                    st.success("Email inviata")
+
+        with col3:
+            if st.button("🗑️ Elimina", key=f"del_{c['ID']}"):
+                st.session_state.clienti = df[df["ID"] != c["ID"]]
+                save_data(st.session_state.clienti)
+                st.rerun()
+
+        st.divider()
+
+# =========================================================
+# 👤 CLIENTI PAGE
+# =========================================================
+elif st.session_state.page == "clienti":
+
+    st.markdown("## 👤 Clienti")
+
+    search = st.text_input("🔍 Cerca cliente")
+    df_view = filtra_clienti(df, search)
+
+    for _, c in df_view.iterrows():
+
+        ultimo_txt = "Nessun invio" if pd.isna(c["UltimoPrezzo"]) else format_euro(c["UltimoPrezzo"]) + " €/L"
+
+        st.markdown(f"""
+        ### 👤 {c['Nome']}
         📄 {c['PIVA']}  
         📞 {c['Telefono']}  
         💰 Ultimo: {ultimo_txt}
@@ -272,14 +291,16 @@ elif st.session_state.page == "clienti":
                 st.session_state.page = "cliente"
 
         with col2:
-            if st.button("🗑️ Elimina", key=f"del_{c['ID']}"):
+            if st.button("🗑️ Elimina", key=f"del_list_{c['ID']}"):
                 st.session_state.clienti = df[df["ID"] != c["ID"]]
                 save_data(st.session_state.clienti)
                 st.rerun()
 
-# =========================
+        st.divider()
+
+# =========================================================
 # ➕ CLIENTE
-# =========================
+# =========================================================
 elif st.session_state.page == "cliente":
 
     st.markdown("## ➕ Cliente")
@@ -287,7 +308,10 @@ elif st.session_state.page == "cliente":
     editing = st.session_state.edit_id is not None
 
     if editing:
-        c = df[df["ID"] == st.session_state.edit_id].iloc[0]
+        c = df[df["ID"] == st.session_state.edit_id]
+        if c.empty:
+            st.stop()
+        c = c.iloc[0]
     else:
         c = {"Nome":"","PIVA":"","Telefono":"","Email":"","Margine":0.0,"Trasporto":0.0}
 
@@ -296,18 +320,21 @@ elif st.session_state.page == "cliente":
     tel = st.text_input("Telefono", value=c["Telefono"])
     email = st.text_input("Email", value=c["Email"])
 
-    margine = st.number_input("Margine", value=float(c["Margine"]), step=0.001)
-    trasporto = st.number_input("Trasporto", value=float(c["Trasporto"]), step=0.001)
+    margine = st.number_input("Margine", value=float(c["Margine"]), step=0.001, format="%.3f")
+    trasporto = st.number_input("Trasporto", value=float(c["Trasporto"]), step=0.001, format="%.3f")
 
     if st.button("💾 Salva"):
+
+        margine = round(float(margine), 3)
+        trasporto = round(float(trasporto), 3)
 
         if editing:
             idx = st.session_state.clienti["ID"] == st.session_state.edit_id
 
-            st.session_state.clienti.loc[idx, "Nome"] = nome
-            st.session_state.clienti.loc[idx, "PIVA"] = piva
-            st.session_state.clienti.loc[idx, "Telefono"] = tel
-            st.session_state.clienti.loc[idx, "Email"] = email
+            st.session_state.clienti.loc[idx, "Nome"] = str(nome)
+            st.session_state.clienti.loc[idx, "PIVA"] = str(piva)
+            st.session_state.clienti.loc[idx, "Telefono"] = str(tel)
+            st.session_state.clienti.loc[idx, "Email"] = str(email)
             st.session_state.clienti.loc[idx, "Margine"] = margine
             st.session_state.clienti.loc[idx, "Trasporto"] = trasporto
 
