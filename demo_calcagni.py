@@ -112,7 +112,9 @@ if "prezzo_base" not in st.session_state:
     st.session_state.prezzo_base = 1.000
 
 if "email_template" not in st.session_state:
-    st.session_state.email_template = """Gentile cliente,<br><br>
+    st.session_state.email_template = """<div style="font-family: Arial, sans-serif; font-size:10px; line-height:1.4; color:#000000;">
+
+Gentile cliente,<br><br>
 
 con la presente le formuliamo la nostra migliore offerta sui prodotti utilizzati dalla Vostra azienda ''ipotizzando'' un presunto scarico per la giornata in oggetto.<br><br>
 
@@ -123,48 +125,43 @@ Per via delle attuali fluttuazioni di mercato i prezzi in elenco avranno una val
 Le consegne dei prodotti avverranno entro il giorno dopo alla data di effettuazione.<br><br>
 
 <b>ATTENZIONE!!!</b> GLI ORDINI DOVRANNO PERVENIRE ENTRO LE ORE 14:00 RISPONDENDO ALLA PRESENTE OPPURE CHIAMANDO AL NUMERO DI TELEFONO<br><br>
-Rag. Silvio Calcagni -335/6145323                 Luigi Calcagni - 3209364267
+
+Rag. Silvio Calcagni - 335/6145323 &nbsp;&nbsp;&nbsp; Luigi Calcagni - 3209364267
 
 <hr>
 
-<div style="font-family: Arial, sans-serif; font-size:11px; line-height:1.4;">
+<p><b>Long Life Consulting</b></p>
 
-<p style="color:#2F5496;"><b>Long Life Consulting</b></p>
-
-<p style="color:#2F5496;">
+<p>
 Luigi Calcagni<br>
-<br>
 Corso Italia, 46 – 80011 Acerra (NA)
 </p>
 
-<p style="color:#2F5496;">
-Mob: <span style="color:#2F5496;">3209364267</span><br>
-<br>
-Info: <span style="color:#2F5496;">info@longlifecons.com</span>
-</p>
-<br>
-<br>
-<br>
-<p style="color:#2F5496;">
-Wholeses Fuels - Fuel Cards - Coupons<br>
-<br>
-<b>Agente di</b><br><br>
-<img src="https://longlifecons.com/wp-content/Prodotti/Tamoil.svg.png" width="90"><br>
+<p>
+Mob: 3209364267<br>
+Info: info@longlifecons.com
 </p>
 
-<p style="color:#2F5496;">
+<p>
+Wholeses Fuels - Fuel Cards - Coupons<br>
+<b>Agente di</b><br><br>
+
+<img src="https://longlifecons.com/wp-content/Prodotti/Tamoil.svg.png" width="90">
+</p>
+
+<p>
 Via Andrea Costa, 17 20131 Milano, ITALIA
 </p>
 
-<p style="color:#2F5496;">
-Tel: <span style="color:#2F5496;">800 11 33 30</span>
+<p>
+Tel: 800 11 33 30
 </p>
-
-</div>
 
 <br>
 
-<div style="font-family: Tahoma, Arial, sans-serif; font-size:11px; color:#000000; line-height:1.4;">
+</div>
+"""
+<div style="font-family: Tahoma, Arial, sans-serif; font-size:10px; color:#000000; line-height:1.4;">
 <i>
 La presente comunicazione, con le informazioni in essa contenute e ogni documento o file allegato, e' strettamente riservata e soggetta alle garanzie che legano i rapporti tra le parti interessate. E' rivolta unicamente alla/e persona/e cui e' indirizzata ed alle altre da questa autorizzata/e a riceverla. Se non siete i destinatari/autorizzati siete avvisati che qualsiasi azione, copia, comunicazione, divulgazione o simili basate sul contenuto di tali informazioni e' vietata e potrebbe essere contro la legge (art. 616 e seguenti C.P., regolamento UE 2016/679). Se avete ricevuto questa comunicazione per errore, vi preghiamo di darne immediata notizia al mittente a mezzo telefono, fax o e-mail e di distruggere il messaggio originale e ogni file allegato senza farne copia alcuna o riprodurne in alcun modo il contenuto. Grazie. Long Life Consulting.
 <br><br>
