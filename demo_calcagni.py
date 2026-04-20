@@ -127,7 +127,7 @@ Rag. Silvio Calcagni -335/6145323                 Luigi Calcagni - 3209364267
 
 <hr>
 
-<div style="font-family: Arial, sans-serif; font-size:14px; line-height:1.5;">
+<div style="font-family: Arial, sans-serif; font-size:11px; line-height:1.4;">
 
 <p style="color:#2F5496;"><b>Long Life Consulting</b></p>
 
@@ -147,6 +147,7 @@ Info: <span style="color:#2F5496;">info@longlifecons.com</span>
 <br>
 <p style="color:#2F5496;">
 Wholeses Fuels - Fuel Cards - Coupons<br>
+<br>
 <b>Agente di</b><br><br>
 <img src="https://longlifecons.com/wp-content/Prodotti/Tamoil.svg.png" width="90"><br>
 </p>
