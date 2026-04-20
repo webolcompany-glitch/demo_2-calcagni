@@ -112,7 +112,7 @@ if "prezzo_base" not in st.session_state:
     st.session_state.prezzo_base = 1.000
 
 if "email_template" not in st.session_state:
-    st.session_state.email_template = """<div style="font-family: Arial, sans-serif; font-size:12px; line-height:1.5; color:#000000;">
+    st.session_state.email_template = """<div style="font-family: Arial, sans-serif; font-size:10px; line-height:1.4; color:#000000;">
 
 Gentile cliente,<br><br>
 
@@ -122,13 +122,16 @@ con la presente le formuliamo la nostra migliore offerta sui prodotti utilizzati
 
 Per via delle attuali fluttuazioni di mercato i prezzi in elenco avranno una validità giornaliera.<br><br>
 
-Le consegne dei prodotti avverranno entro il giorno dopo alla data di effettuazione.<br><br>
+Le consegne dei prodotti avverranno entro il giorno dopo alla data di effettuazione dell'ordine.<br><br>
 
 <b>ATTENZIONE!!!</b> GLI ORDINI DOVRANNO PERVENIRE ENTRO LE ORE 14:00 RISPONDENDO ALLA PRESENTE OPPURE CHIAMANDO AL NUMERO DI TELEFONO<br><br>
 
 Rag. Silvio Calcagni - 335/6145323 &nbsp;&nbsp;&nbsp; Luigi Calcagni - 3209364267
 
-<div style="font-family: Arial, sans-serif; font-size:10px; line-height:1.4; color:#2F5496;">
+<hr>
+
+<!-- FIRMA -->
+<div style="font-family: Arial, sans-serif; font-size:12px; line-height:1.4; color:#2F5496; margin-top:10px;">
 
 <p><b>Long Life Consulting</b></p>
 
@@ -159,7 +162,9 @@ Tel: 800 11 33 30
 
 </div>
 
-<!-- DISCLAMER -->
+<br>
+
+<!-- DISCLAIMER -->
 <div style="font-family: Tahoma, Arial, sans-serif; font-size:10px; color:#000000; line-height:1.4;">
 <i>
 La presente comunicazione, con le informazioni in essa contenute e ogni documento o file allegato, e' strettamente riservata e soggetta alle garanzie che legano i rapporti tra le parti interessate. E' rivolta unicamente alla/e persona/e cui e' indirizzata ed alle altre da questa autorizzata/e a riceverla. Se non siete i destinatari/autorizzati siete avvisati che qualsiasi azione, copia, comunicazione, divulgazione o simili basate sul contenuto di tali informazioni e' vietata e potrebbe essere contro la legge (art. 616 e seguenti C.P., regolamento UE 2016/679). Se avete ricevuto questa comunicazione per errore, vi preghiamo di darne immediata notizia al mittente a mezzo telefono, fax o e-mail e di distruggere il messaggio originale e ogni file allegato senza farne copia alcuna o riprodurne in alcun modo il contenuto. Grazie. Long Life Consulting.
