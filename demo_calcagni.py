@@ -155,7 +155,7 @@ Tel: <span style="color:#2F5496;">800 11 33 30</span>
 </p>
 
 </div>
-
+"""
 if "wa_template" not in st.session_state:
     st.session_state.wa_template = """Gentile cliente {nome},
 
