@@ -127,31 +127,31 @@ Rag. Silvio Calcagni -335/6145323                 Luigi Calcagni - 3209364267
 
 <hr>
 
-<div style="font-family: Arial, sans-serif; font-size:14px; color:rgb(47,84,150); line-height:1.5;">
+<div style="font-family: Arial, sans-serif; font-size:14px; line-height:1.5;">
 
-<p><b>Long Life Consulting</b></p>
+<p style="color:#2F5496;"><b>Long Life Consulting</b></p>
 
-<p>
+<p style="color:#2F5496;">
 Luigi Calcagni<br>
 Corso Italia, 46 – 80011 Acerra (NA)
 </p>
 
-<p>
-Mob: 3209364267<br>
-Info: info@longlifecons.com
+<p style="color:#2F5496;">
+Mob: <span style="color:#2F5496;">3209364267</span><br>
+Info: <span style="color:#2F5496;">info@longlifecons.com</span>
 </p>
 
-<p>
+<p style="color:#2F5496;">
 Wholeses Fuels - Fuel Cards - Coupons<br>
 Agente di
 </p>
 
-<p>
+<p style="color:#2F5496;">
 Via Andrea Costa, 17 20131 Milano, ITALIA
 </p>
 
-<p>
-Tel: 800 11 33 30
+<p style="color:#2F5496;">
+Tel: <span style="color:#2F5496;">800 11 33 30</span>
 </p>
 
 </div>
