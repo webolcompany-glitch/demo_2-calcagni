@@ -131,7 +131,7 @@ Rag. Silvio Calcagni - 335/6145323 &nbsp;&nbsp;&nbsp; Luigi Calcagni - 320936426
 <hr>
 
 <!-- FIRMA -->
-<div style="font-family: Arial, sans-serif; font-size:11px; line-height:1.4; color:#2F5496; margin-top:10px;">
+<div style="font-family: Arial, sans-serif; font-size:12px; line-height:1.4; color:#2F5496; margin-top:10px;">
 
 <p><b>Long Life Consulting</b></p>
 
@@ -146,7 +146,6 @@ Mob: 3209364267<br>
 <br>
 Info: info@longlifecons.com
 </p>
-<br>
 <br>
 <br>
 <br>
