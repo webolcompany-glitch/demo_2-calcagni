@@ -112,7 +112,7 @@ if "prezzo_base" not in st.session_state:
     st.session_state.prezzo_base = 1.000
 
 if "email_template" not in st.session_state:
-    st.session_state.email_template = """<div style="font-family: Arial, sans-serif; font-size:10px; line-height:1.4; color:#000000;">
+    st.session_state.email_template = """<div style="font-family: Arial, sans-serif; font-size:12px; line-height:1.5; color:#000000;">
 
 Gentile cliente,<br><br>
 
@@ -131,22 +131,28 @@ Rag. Silvio Calcagni - 335/6145323 &nbsp;&nbsp;&nbsp; Luigi Calcagni - 320936426
 <hr>
 
 <!-- FIRMA -->
-<div style="font-family: Arial, sans-serif; font-size:12px; line-height:1.4; color:#2F5496; margin-top:10px;">
+<div style="font-family: Arial, sans-serif; font-size:11px; line-height:1.4; color:#2F5496; margin-top:10px;">
 
 <p><b>Long Life Consulting</b></p>
 
 <p>
 Luigi Calcagni<br>
+<br>
 Corso Italia, 46 – 80011 Acerra (NA)
 </p>
 
 <p>
 Mob: 3209364267<br>
+<br>
 Info: info@longlifecons.com
 </p>
-
+<br>
+<br>
+<br>
+<br>
 <p>
 Wholeses Fuels - Fuel Cards - Coupons<br>
+<br>
 <b>Agente di</b><br><br>
 
 <img src="https://longlifecons.com/wp-content/Prodotti/Tamoil.svg.png" width="90">
