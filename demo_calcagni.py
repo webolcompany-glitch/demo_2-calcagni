@@ -167,7 +167,7 @@ Gasolio per autotrazione = {prezzo}/litro + Iva
 
 Per via delle attuali fluttuazioni di mercato i prezzi in elenco avranno una validità giornaliera.
 
-Le consegne dei prodotti avverranno entro il giorno dopo alla data di effettuazione dell’ordine.
+Le consegne dei prodotti avverranno entro il giorno dopo alla data di effettuazione dell'ordine.
 
 ATTENZIONE!!! GLI ORDINI DOVRANNO PERVENIRE ENTRO LE ORE 14:00 RISPONDENDO ALLA PRESENTE OPPURE CHIAMANDO AL NUMERO DI TELEFONO
 Rag. Silvio Calcagni -335/6145323                 Luigi Calcagni - 3209364267
