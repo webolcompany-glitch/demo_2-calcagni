@@ -120,7 +120,7 @@ con la presente le formuliamo la nostra migliore offerta sui prodotti utilizzati
 
 Per via delle attuali fluttuazioni di mercato i prezzi in elenco avranno una validità giornaliera.<br><br>
 
-Le consegne dei prodotti avverranno entro il giorno dopo alla data di effettuazione dell'ordine.<br><br>
+Le consegne dei prodotti avverranno entro il giorno dopo alla data di effettuazione.<br><br>
 
 <b>ATTENZIONE!!!</b> GLI ORDINI DOVRANNO PERVENIRE ENTRO LE ORE 14:00 RISPONDENDO ALLA PRESENTE OPPURE CHIAMANDO AL NUMERO DI TELEFONO<br><br>
 Rag. Silvio Calcagni -335/6145323                 Luigi Calcagni - 3209364267
