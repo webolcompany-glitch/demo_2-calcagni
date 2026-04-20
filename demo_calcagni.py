@@ -148,7 +148,7 @@ Info: <span style="color:#2F5496;">info@longlifecons.com</span>
 <p style="color:#2F5496;">
 Wholeses Fuels - Fuel Cards - Coupons<br>
 <b>Agente di</b><br><br>
-<img src="https://longlifecons.com/wp-content/Prodotti/Tamoil.svg.png" width="96"><br>
+<img src="https://longlifecons.com/wp-content/Prodotti/Tamoil.svg.png" width="90"><br>
 </p>
 
 <p style="color:#2F5496;">
