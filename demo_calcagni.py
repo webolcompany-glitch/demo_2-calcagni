@@ -128,7 +128,7 @@ Le consegne dei prodotti avverranno entro il giorno dopo alla data di effettuazi
 
 Rag. Silvio Calcagni - 335/6145323 &nbsp;&nbsp;&nbsp; Luigi Calcagni - 3209364267
 
-<hr>
+<div style="font-family: Arial, sans-serif; font-size:10px; line-height:1.4; color:#2F5496;">
 
 <p><b>Long Life Consulting</b></p>
 
@@ -157,7 +157,7 @@ Via Andrea Costa, 17 20131 Milano, ITALIA
 Tel: 800 11 33 30
 </p>
 
-<br>
+</div>
 
 <!-- DISCLAMER -->
 <div style="font-family: Tahoma, Arial, sans-serif; font-size:10px; color:#000000; line-height:1.4;">
