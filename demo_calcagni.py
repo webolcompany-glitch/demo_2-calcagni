@@ -112,7 +112,7 @@ if "prezzo_base" not in st.session_state:
     st.session_state.prezzo_base = 1.000
 
 if "email_template" not in st.session_state:
-    st.session_state.email_template = """<div style="font-family: Tahoma, Arial, sans-serif; font-size:12px; line-height:1.5; color:#000000;">
+    st.session_state.email_template = """<div style="font-family: Tahoma, Arial, sans-serif; font-size:14px; line-height:1.5; color:#000000;">
 
 Gentile cliente,<br><br>
 
@@ -131,7 +131,7 @@ Rag. Silvio Calcagni - 335/6145323 &nbsp;&nbsp;&nbsp; Luigi Calcagni - 320936426
 <br>
 <br>
 <!-- FIRMA -->
-<div style="font-family: Arial, sans-serif; font-size:12px; line-height:1.4; color:#2F5496; margin-top:10px;">
+<div style="font-family: Arial, sans-serif; font-size:13px; line-height:1.4; color:#2F5496; margin-top:10px;">
 
 <p><b>Long Life Consulting</b></p>
 
