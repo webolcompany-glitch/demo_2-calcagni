@@ -121,8 +121,6 @@ def load_data():
 
 def save_data(df):
 
-    supabase.table("clienti").delete().neq("id", 0).execute()
-
     records = df.rename(columns={
         "ID":"id",
         "Nome":"nome",
@@ -135,7 +133,7 @@ def save_data(df):
     }).to_dict(orient="records")
 
     if records:
-        supabase.table("clienti").insert(records).execute()
+        supabase.table("clienti").upsert(records).execute()
 
 # =========================
 # INIT
