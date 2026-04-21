@@ -5,7 +5,12 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
+from supabase import create_client
 
+supabase = create_client(
+    st.secrets["SUPABASE_URL"],
+    st.secrets["SUPABASE_KEY"]
+)
 st.set_page_config(page_title="Fuel SaaS", layout="wide")
 
 # =========================
@@ -90,27 +95,47 @@ def filtra_clienti(df, search):
 # 💾 DATA
 # =========================
 def load_data():
-    if os.path.exists(FILE):
-        df = pd.read_csv(FILE)
+    res = supabase.table("clienti").select("*").execute()
+    data = res.data
 
-        for col in ["Nome","PIVA","Telefono","Email"]:
-            df[col] = df[col].astype(str)
+    if not data:
+        return pd.DataFrame(columns=[
+            "ID","Nome","PIVA","Telefono","Email",
+            "Margine","Trasporto","UltimoPrezzo"
+        ])
 
-        for col in ["Margine","Trasporto"]:
-            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0)
+    df = pd.DataFrame(data)
 
-        if "UltimoPrezzo" not in df.columns:
-            df["UltimoPrezzo"] = None
+    df = df.rename(columns={
+        "id":"ID",
+        "nome":"Nome",
+        "piva":"PIVA",
+        "telefono":"Telefono",
+        "email":"Email",
+        "margine":"Margine",
+        "trasporto":"Trasporto",
+        "ultimo_prezzo":"UltimoPrezzo"
+    })
 
-        return df
-
-    return pd.DataFrame(columns=[
-        "ID","Nome","PIVA","Telefono","Email",
-        "Margine","Trasporto","UltimoPrezzo"
-    ])
+    return df
 
 def save_data(df):
-    df.to_csv(FILE, index=False)
+
+    supabase.table("clienti").delete().neq("id", 0).execute()
+
+    records = df.rename(columns={
+        "ID":"id",
+        "Nome":"nome",
+        "PIVA":"piva",
+        "Telefono":"telefono",
+        "Email":"email",
+        "Margine":"margine",
+        "Trasporto":"trasporto",
+        "UltimoPrezzo":"ultimo_prezzo"
+    }).to_dict(orient="records")
+
+    if records:
+        supabase.table("clienti").insert(records).execute()
 
 # =========================
 # INIT
