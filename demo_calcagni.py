@@ -170,7 +170,7 @@ Rag. Silvio Calcagni - 335/6145323 &nbsp;&nbsp;&nbsp; Luigi Calcagni - 320936426
 <br>
 <br>
 <!-- FIRMA -->
-<div style="font-family: Verdana, sans-serif; font-size:10px; line-height:1.4; color:#2F5496; margin-top:10px;">
+<div style="font-family: Verdana, sans-serif; font-size:11px; line-height:1.4; color:#2F5496; margin-top:10px;">
 
 <p><b>Long Life Consulting</b></p>
 
