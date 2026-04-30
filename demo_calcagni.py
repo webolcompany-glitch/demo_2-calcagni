@@ -4,9 +4,59 @@ import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from datetime import datetime
+from datetime import datetime, timedelta
 from supabase import create_client
 
+def pasqua(anno):
+    """Calcolo Pasqua (algoritmo di Gauss)"""
+    a = anno % 19
+    b = anno // 100
+    c = anno % 100
+    d = b // 4
+    e = b % 4
+    f = (b + 8) // 25
+    g = (b - f + 1) // 3
+    h = (19*a + b - d - g + 15) % 30
+    i = c // 4
+    k = c % 4
+    l = (32 + 2*e + 2*i - h - k) % 7
+    m = (a + 11*h + 22*l) // 451
+    mese = (h + l - 7*m + 114) // 31
+    giorno = ((h + l - 7*m + 114) % 31) + 1
+    return datetime(anno, mese, giorno)
+
+def festivi_italiani(anno):
+    pasqua_date = pasqua(anno)
+    pasquetta = pasqua_date + timedelta(days=1)
+
+    return set([
+        datetime(anno, 1, 1),   # Capodanno
+        datetime(anno, 1, 6),   # Epifania
+        datetime(anno, 4, 25),  # Liberazione
+        datetime(anno, 5, 1),   # Lavoro
+        datetime(anno, 6, 2),   # Repubblica
+        datetime(anno, 8, 15),  # Ferragosto
+        datetime(anno, 11, 1),  # Ognissanti
+        datetime(anno, 12, 8),  # Immacolata
+        datetime(anno, 12, 25), # Natale
+        datetime(anno, 12, 26), # Santo Stefano
+        pasqua_date,
+        pasquetta
+    ])
+
+def prossimo_giorno_lavorativo(data=None):
+    if data is None:
+        data = datetime.now()
+
+    giorno = data + timedelta(days=1)
+    festivi = festivi_italiani(giorno.year)
+
+    while giorno.weekday() >= 5 or giorno.replace(hour=0, minute=0, second=0, microsecond=0) in festivi:
+        giorno += timedelta(days=1)
+        festivi = festivi_italiani(giorno.year)
+
+    return giorno
+    
 supabase = create_client(
     st.secrets["SUPABASE_URL"],
     st.secrets["SUPABASE_KEY"]
@@ -32,7 +82,13 @@ PASSWORD_APP = st.secrets["PASSWORD_APP"]
 
 def invia_email(destinatari, prezzo, template, nome=""):
     try:
-        data = datetime.now().strftime("%d/%m/%Y")
+        data_invio = datetime.now()
+        data_scarico = prossimo_giorno_lavorativo()
+
+        giorni = ["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"]
+        giorno_nome = giorni[data_scarico.weekday()]
+
+        data = f"{giorno_nome} {data_scarico.strftime('%d/%m/%Y')}"
 
         testo = template \
             .replace("{prezzo}", f"{prezzo:.3f}") \
@@ -387,7 +443,12 @@ if st.session_state.page == "dashboard":
             import urllib.parse
 
             tel = str(c["Telefono"]).replace("+", "").replace(" ", "")
-            data = datetime.now().strftime("%d/%m/%Y")
+            data_scarico = prossimo_giorno_lavorativo()
+
+            giorni = ["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"]
+            giorno_nome = giorni[data_scarico.weekday()]
+
+            data = f"{giorno_nome} {data_scarico.strftime('%d/%m/%Y')}"
 
             msg = st.session_state.wa_template \
                 .replace("{prezzo}", format_euro(prezzo)) \
