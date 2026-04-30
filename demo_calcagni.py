@@ -96,7 +96,7 @@ def invia_email(destinatari, prezzo, template, nome=""):
             .replace("{data}", data)
 
         msg = MIMEMultipart("alternative")
-        msg["Subject"] = f"OFFERTA CARBURANTE - {data}"
+        msg["Subject"] = f"OFFERTA CARBURANTE - PREZZI VALIDI PER {data}"
         msg["From"] = EMAIL_MITTENTE
 
         # 👉 lista email
@@ -289,7 +289,7 @@ Per via delle attuali fluttuazioni di mercato i prezzi in elenco avranno una val
 Le consegne dei prodotti avverranno entro il giorno dopo alla data di effettuazione dell'ordine.
 
 ATTENZIONE!!! GLI ORDINI DOVRANNO PERVENIRE ENTRO LE ORE 14:00 RISPONDENDO ALLA PRESENTE OPPURE CHIAMANDO AL NUMERO DI TELEFONO
-Rag. Silvio Calcagni -335/6145323                 Luigi Calcagni - 3209364267
+Enrico Procaccini - 3892159094                
 
 Cordiali saluti
 Long Life Consulting
